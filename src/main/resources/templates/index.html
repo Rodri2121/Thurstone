@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Orientación Vocacional | Método Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--inicio">
+<main class="contenedor">
+
+    <section class="heroe">
+        <p class="heroe__sello">Orientación vocacional universitaria</p>
+        <h1 class="heroe__titulo">Test de Intereses Profesionales<span>Método Thurstone</span></h1>
+        <p class="heroe__descripcion">
+            Descubre las carreras en las que tienes mayor fortaleza a partir de las
+            actividades profesionales que más te atraen. La prueba toma entre
+            <strong>25 y 30 minutos</strong> y se responde en una sola sesión.
+        </p>
+    </section>
+
+    <section class="pasos" aria-label="Cómo funciona la prueba">
+        <article class="paso">
+            <span class="paso__numero">1</span>
+            <h2 class="paso__titulo">Lee cada bloque</h2>
+            <p>Verás bloques de actividades profesionales, uno a la vez.
+               El nombre de la carrera nunca se muestra.</p>
+        </article>
+        <article class="paso">
+            <span class="paso__numero">2</span>
+            <h2 class="paso__titulo">Marca lo que te gusta</h2>
+            <p>Selecciona únicamente las actividades que te atraigan.
+               Las que no te llamen la atención, déjalas sin marcar.</p>
+        </article>
+        <article class="paso">
+            <span class="paso__numero">3</span>
+            <h2 class="paso__titulo">Avanza sin volver</h2>
+            <p>Al pasar al siguiente bloque no podrás regresar al anterior,
+               así que responde con seguridad.</p>
+        </article>
+    </section>
+
+    <blockquote class="impulso">
+        “No medite tanto sus respuestas, <strong>confíe en su primer impulso</strong>.”
+    </blockquote>
+
+    <aside class="advertencia" role="alert">
+        <h2 class="advertencia__titulo">Advertencia</h2>
+        <p>
+            Cualquier inconsistencia o intento de sabotaje —como marcar todas las
+            actividades o no marcar ninguna— <strong>invalidará la prueba por un año</strong>.
+        </p>
+    </aside>
+
+    <div class="llamada">
+        <a class="boton boton--primario boton--grande" th:href="@{/evaluacion}">Comenzar la evaluación</a>
+    </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--evaluacion">
+<main class="contenedor contenedor--angosto">
+
+    <header class="progreso">
+        <p class="progreso__texto">
+            Pregunta <span id="numeroPregunta">1</span> de
+            <span id="totalPreguntas" th:text="${#lists.size(preguntas)}">4</span>
+        </p>
+        <div class="progreso__barra" aria-hidden="true">
+            <div class="progreso__relleno" id="rellenoProgreso"></div>
+        </div>
+    </header>
+
+    <!-- Todas las preguntas se renderizan en el DOM; el JS muestra solo la activa.
+         Las inactivas quedan con display:none, así sus checkboxes marcados
+         siguen viajando en el POST final. -->
+    <form id="formularioEvaluacion" method="post" th:action="@{/resultados}" novalidate>
+        <input type="hidden" id="inicioCliente" name="inicioCliente" value="">
+
+        <section class="pregunta" th:each="pregunta, iter : ${preguntas}"
+                 th:classappend="${iter.index == 0} ? 'activa'">
+            <h1 class="pregunta__titulo" th:text="${pregunta.enunciado}">Enunciado de la pregunta</h1>
+            <p class="pregunta__ayuda">
+                Marca únicamente las actividades que te atraigan; deja las demás sin marcar.
+            </p>
+            <div class="tarjetas">
+                <label class="tarjeta" th:each="tarea : ${pregunta.tareas}">
+                    <input type="checkbox" class="tarjeta__check" name="selecciones" th:value="${tarea.id}">
+                    <span class="tarjeta__texto" th:text="${tarea.descripcion}">Descripción de la actividad</span>
+                    <span class="tarjeta__icono" aria-hidden="true"></span>
+                </label>
+            </div>
+        </section>
+
+        <footer class="acciones">
+            <button type="button" id="botonSiguiente" class="boton boton--primario">Siguiente</button>
+            <p class="acciones__nota">Recuerda: no es posible volver a una pregunta anterior.</p>
+        </footer>
+    </form>
+
+</main>
+<script th:src="@{/js/evaluacion.js}"></script>
+</body>
+</html>

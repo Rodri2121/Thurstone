@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--resultados">
+<main class="contenedor">
+
+    <section th:if="${invalida}" class="panel panel--invalida" role="alert">
+        <h1 class="panel__titulo">Prueba invalidada</h1>
+        <p>
+            Se detectó una inconsistencia en tus respuestas (marcar todas las
+            actividades o no marcar ninguna). De acuerdo con las condiciones que
+            aceptaste al iniciar, <strong>la prueba queda invalidada por un año</strong>.
+        </p>
+        <a class="boton boton--secundario" th:href="@{/}">Volver al inicio</a>
+    </section>
+
+    <section th:unless="${invalida}">
+        <header class="encabezado-resultados">
+            <h1>Tus resultados</h1>
+            <p class="dato-tiempo" th:if="${duracion != null}">
+                Tiempo total: <strong th:text="${duracion}">12 min 30 s</strong>
+            </p>
+        </header>
+
+        <div class="grafico" role="img"
+             aria-label="Gráfico de barras con tu puntaje por carrera, ordenado de mayor a menor">
+            <div class="grafico__columna" th:each="r : ${resultados}">
+                <div class="grafico__zona">
+                    <span class="grafico__valor" th:text="${r.puntaje}">3</span>
+                    <div class="grafico__barra" th:classappend="${r.claseCss}"
+                         th:style="'--altura:' + ${r.porcentaje} + '%'"></div>
+                </div>
+                <span class="grafico__etiqueta" th:text="${r.area}">Carrera</span>
+            </div>
+        </div>
+
+        <p class="mensaje-final">
+            Según los resultados, las carreras donde tienes mayor fortaleza son
+            <strong th:text="${carrera1}">Carrera 1</strong> y
+            <strong th:text="${carrera2}">Carrera 2</strong>.
+        </p>
+
+        <div class="llamada">
+            <a class="boton boton--primario" th:href="@{/}">Volver al inicio</a>
+        </div>
+    </section>
+
+</main>
+<script>
+    // La prueba terminó: se limpia la telemetría y el avance guardado para
+    // que un nuevo intento empiece desde cero.
+    ['thurstone_inicio', 'thurstone_paso', 'thurstone_seleccion']
+        .forEach(function (clave) { sessionStorage.removeItem(clave); });
+</script>
+</body>
+</html>
