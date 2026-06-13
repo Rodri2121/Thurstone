@@ -12,8 +12,8 @@
     <section th:if="${invalida}" class="panel panel--invalida" role="alert">
         <h1 class="panel__titulo">Prueba invalidada</h1>
         <p>
-            Se detectó una inconsistencia en tus respuestas (marcar todas las
-            actividades o no marcar ninguna). De acuerdo con las condiciones que
+            Se detectó una inconsistencia en tus respuestas (prueba incompleta o
+            responder siempre lo mismo). De acuerdo con las condiciones que
             aceptaste al iniciar, <strong>la prueba queda invalidada por un año</strong>.
         </p>
         <a class="boton boton--secundario" th:href="@{/}">Volver al inicio</a>
@@ -28,21 +28,25 @@
         </header>
 
         <div class="grafico" role="img"
-             aria-label="Gráfico de barras con tu puntaje por carrera, ordenado de mayor a menor">
+             aria-label="Gráfico de barras con tu puntaje por área de interés, ordenado de mayor a menor">
             <div class="grafico__columna" th:each="r : ${resultados}">
                 <div class="grafico__zona">
                     <span class="grafico__valor" th:text="${r.puntaje}">3</span>
                     <div class="grafico__barra" th:classappend="${r.claseCss}"
                          th:style="'--altura:' + ${r.porcentaje} + '%'"></div>
                 </div>
-                <span class="grafico__etiqueta" th:text="${r.area}">Carrera</span>
+                <span class="grafico__etiqueta" th:text="${r.area}">Área</span>
             </div>
         </div>
 
         <p class="mensaje-final">
-            Según los resultados, las carreras donde tienes mayor fortaleza son
-            <strong th:text="${carrera1}">Carrera 1</strong> y
-            <strong th:text="${carrera2}">Carrera 2</strong>.
+            Según los resultados, tus áreas de mayor interés son
+            <strong th:text="${area1}">Área 1</strong> y
+            <strong th:text="${area2}">Área 2</strong>.
+            <span class="mensaje-final__carreras"
+                  th:text="'Carreras afines: ' + ${resultados[0].carreras} + ' · ' + ${resultados[1].carreras}">
+                Carreras afines…
+            </span>
         </p>
 
         <div class="llamada">

@@ -267,12 +267,23 @@ body {
     color: var(--tinta-suave);
 }
 
-.tarjetas {
+/* Cada paso del wizard presenta un par de ocupaciones con 4 respuestas
+   (primera, segunda, ambas, ninguna) como un grupo de radios. */
+.par {
+    border: none;
+    margin: 0;
+    padding: 0;
     display: grid;
     gap: 14px;
 }
 
-.tarjeta {
+.par__secundarias {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.opcion {
     position: relative;
     display: flex;
     align-items: center;
@@ -286,59 +297,80 @@ body {
                 transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.tarjeta:hover {
+.opcion:hover {
     transform: translateY(-2px);
     box-shadow: var(--sombra);
     border-color: var(--azul-claro);
 }
 
-.tarjeta:focus-within {
+.opcion:focus-within {
     outline: 3px solid var(--azul-claro);
     outline-offset: 2px;
 }
 
-/* El checkbox real queda oculto pero accesible (teclado y lector de pantalla) */
-.tarjeta__check {
+/* El radio real queda oculto pero accesible (teclado y lector de pantalla) */
+.opcion input {
     position: absolute;
     opacity: 0;
     pointer-events: none;
 }
 
-.tarjeta__texto {
+.opcion__texto {
     flex: 1;
     font-size: 1.05rem;
 }
 
-.tarjeta__icono {
+.opcion--secundaria {
+    padding: 14px 16px;
+    background: var(--fondo);
+}
+
+.opcion--secundaria .opcion__texto {
+    font-size: 0.98rem;
+    color: var(--tinta-suave);
+}
+
+.opcion__marca {
     flex-shrink: 0;
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     border: 2px solid #cbd5e1;
     display: grid;
     place-items: center;
-    color: transparent;
-    font-size: 0.85rem;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    transition: border-color 0.15s ease;
 }
 
-.tarjeta__icono::after {
-    content: "✓";
+.opcion__marca::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color 0.15s ease;
 }
 
 /* Estado seleccionado: :has() en navegadores modernos y la clase
    .seleccionada que aplica el JS como respaldo en los demás. */
-.tarjeta.seleccionada,
-.tarjeta:has(.tarjeta__check:checked) {
+.opcion.seleccionada,
+.opcion:has(input:checked) {
     border-color: var(--azul-oscuro);
     background: var(--azul-fondo-suave);
 }
 
-.tarjeta.seleccionada .tarjeta__icono,
-.tarjeta:has(.tarjeta__check:checked) .tarjeta__icono {
-    background: var(--azul-oscuro);
+.opcion--secundaria.seleccionada .opcion__texto,
+.opcion--secundaria:has(input:checked) .opcion__texto {
+    color: var(--azul-oscuro);
+}
+
+.opcion.seleccionada .opcion__marca,
+.opcion:has(input:checked) .opcion__marca {
     border-color: var(--azul-oscuro);
-    color: #fff;
+}
+
+.opcion.seleccionada .opcion__marca::after,
+.opcion:has(input:checked) .opcion__marca::after {
+    background: var(--azul-oscuro);
 }
 
 .acciones {
@@ -353,6 +385,30 @@ body {
     margin: 0;
     font-size: 0.88rem;
     color: var(--tinta-suave);
+}
+
+.acciones__aviso {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--rojo-tinta);
+}
+
+.acciones__aviso[hidden] {
+    display: none;
+}
+
+/* Solo para lectores de pantalla (etiquetas de los grupos de radios) */
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ---------- Resultados ---------- */
@@ -469,6 +525,13 @@ body {
     color: var(--azul-oscuro);
 }
 
+.mensaje-final__carreras {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: var(--tinta-suave);
+}
+
 /* ---------- Prueba invalidada ---------- */
 
 .panel--invalida {
@@ -508,6 +571,10 @@ body {
 
     .grafico__etiqueta {
         font-size: 0.72rem;
+    }
+
+    .par__secundarias {
+        grid-template-columns: 1fr;
     }
 }
 

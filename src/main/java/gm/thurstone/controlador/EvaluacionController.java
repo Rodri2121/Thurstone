@@ -1,7 +1,8 @@
 package gm.thurstone.controlador;
 
 import gm.thurstone.modelo.ResultadoArea;
-import gm.thurstone.servicio.PreguntaService;
+import gm.thurstone.modelo.Respuesta;
+import gm.thurstone.servicio.TestService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class EvaluacionController {
 
     private static final String ATRIBUTO_INICIO = "inicioEvaluacion";
 
-    private final PreguntaService preguntaService;
+    private final TestService testService;
 
-    public EvaluacionController(PreguntaService preguntaService) {
-        this.preguntaService = preguntaService;
+    public EvaluacionController(TestService testService) {
+        this.testService = testService;
     }
 
     @GetMapping("/")
@@ -38,33 +40,32 @@ public class EvaluacionController {
         if (session.getAttribute(ATRIBUTO_INICIO) == null) {
             session.setAttribute(ATRIBUTO_INICIO, Instant.now());
         }
-        model.addAttribute("preguntas", preguntaService.obtenerPreguntas());
+        model.addAttribute("pares", testService.obtenerPares());
         return "evaluacion";
     }
 
     @PostMapping("/resultados")
     public String resultados(
-            @RequestParam(name = "selecciones", required = false) List<Integer> selecciones,
+            @RequestParam Map<String, String> parametros,
             @RequestParam(name = "inicioCliente", required = false) String inicioCliente,
             HttpSession session, Model model) {
 
         Duration duracion = calcularDuracion(session, inicioCliente);
         model.addAttribute("duracion", duracion.isZero() ? null : formatear(duracion));
 
-        List<Integer> ids = selecciones == null ? List.of() : selecciones.stream().distinct().toList();
+        Map<Integer, Respuesta> respuestas = testService.parsearRespuestas(parametros);
 
-        // Regla anti-sabotaje validada en servidor (el JS del cliente es evitable):
-        // marcar todas las actividades o ninguna invalida la prueba.
-        boolean sabotaje = ids.isEmpty() || ids.size() >= preguntaService.totalTareas();
-        model.addAttribute("invalida", sabotaje);
-        if (sabotaje) {
+        // Validación anti-sabotaje en servidor (el JS del cliente es evitable).
+        boolean invalida = testService.esSabotaje(respuestas);
+        model.addAttribute("invalida", invalida);
+        if (invalida) {
             return "resultados";
         }
 
-        List<ResultadoArea> resultados = preguntaService.calcularResultados(ids);
+        List<ResultadoArea> resultados = testService.calcularResultados(respuestas);
         model.addAttribute("resultados", resultados);
-        model.addAttribute("carrera1", resultados.get(0).area());
-        model.addAttribute("carrera2", resultados.get(1).area());
+        model.addAttribute("area1", resultados.get(0).area());
+        model.addAttribute("area2", resultados.get(1).area());
         return "resultados";
     }
 

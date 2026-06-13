@@ -1,4 +1,4 @@
 package gm.thurstone.modelo;
 
-public record ResultadoArea(String area, int puntaje, int porcentaje, String claseCss) {
+public record ResultadoArea(String area, int puntaje, int porcentaje, String claseCss, String carreras) {
 }

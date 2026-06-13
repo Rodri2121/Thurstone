@@ -11,38 +11,67 @@
 
     <header class="progreso">
         <p class="progreso__texto">
-            Pregunta <span id="numeroPregunta">1</span> de
-            <span id="totalPreguntas" th:text="${#lists.size(preguntas)}">4</span>
+            Par <span id="numeroPregunta">1</span> de
+            <span id="totalPreguntas" th:text="${#lists.size(pares)}">10</span>
         </p>
         <div class="progreso__barra" aria-hidden="true">
             <div class="progreso__relleno" id="rellenoProgreso"></div>
         </div>
     </header>
 
-    <!-- Todas las preguntas se renderizan en el DOM; el JS muestra solo la activa.
-         Las inactivas quedan con display:none, así sus checkboxes marcados
-         siguen viajando en el POST final. -->
+    <!-- Todos los pares se renderizan en el DOM; el JS muestra solo el activo.
+         Los inactivos quedan con display:none, así la respuesta marcada en cada
+         uno sigue viajando en el POST final. El área de cada ocupación NO se
+         renderiza: el mapeo ocupación→área vive solo en el servidor. -->
     <form id="formularioEvaluacion" method="post" th:action="@{/resultados}" novalidate>
         <input type="hidden" id="inicioCliente" name="inicioCliente" value="">
 
-        <section class="pregunta" th:each="pregunta, iter : ${preguntas}"
+        <section class="pregunta" th:each="par, iter : ${pares}"
                  th:classappend="${iter.index == 0} ? 'activa'">
-            <h1 class="pregunta__titulo" th:text="${pregunta.enunciado}">Enunciado de la pregunta</h1>
+            <h1 class="pregunta__titulo">¿Qué actividad prefieres?</h1>
             <p class="pregunta__ayuda">
-                Marca únicamente las actividades que te atraigan; deja las demás sin marcar.
+                Confía en tu primer impulso. Elige la actividad que prefieras,
+                marca «ambas» si las dos te atraen o «ninguna» si no te atrae ninguna.
             </p>
-            <div class="tarjetas">
-                <label class="tarjeta" th:each="tarea : ${pregunta.tareas}">
-                    <input type="checkbox" class="tarjeta__check" name="selecciones" th:value="${tarea.id}">
-                    <span class="tarjeta__texto" th:text="${tarea.descripcion}">Descripción de la actividad</span>
-                    <span class="tarjeta__icono" aria-hidden="true"></span>
+
+            <fieldset class="par">
+                <legend class="visualmente-oculto">
+                    Par <span th:text="${iter.count}">1</span>: elige una opción
+                </legend>
+
+                <label class="opcion opcion--principal">
+                    <input type="radio" th:name="'par_' + ${par.numero}" value="PRIMERA">
+                    <span class="opcion__texto" th:text="${par.primera.descripcion}">Primera actividad</span>
+                    <span class="opcion__marca" aria-hidden="true"></span>
                 </label>
-            </div>
+
+                <label class="opcion opcion--principal">
+                    <input type="radio" th:name="'par_' + ${par.numero}" value="SEGUNDA">
+                    <span class="opcion__texto" th:text="${par.segunda.descripcion}">Segunda actividad</span>
+                    <span class="opcion__marca" aria-hidden="true"></span>
+                </label>
+
+                <div class="par__secundarias">
+                    <label class="opcion opcion--secundaria">
+                        <input type="radio" th:name="'par_' + ${par.numero}" value="AMBAS">
+                        <span class="opcion__texto">Me gustan ambas</span>
+                        <span class="opcion__marca" aria-hidden="true"></span>
+                    </label>
+                    <label class="opcion opcion--secundaria">
+                        <input type="radio" th:name="'par_' + ${par.numero}" value="NINGUNA">
+                        <span class="opcion__texto">Ninguna me atrae</span>
+                        <span class="opcion__marca" aria-hidden="true"></span>
+                    </label>
+                </div>
+            </fieldset>
         </section>
 
         <footer class="acciones">
             <button type="button" id="botonSiguiente" class="boton boton--primario">Siguiente</button>
-            <p class="acciones__nota">Recuerda: no es posible volver a una pregunta anterior.</p>
+            <p class="acciones__aviso" id="avisoSeleccion" role="alert" hidden>
+                Selecciona una opción para continuar.
+            </p>
+            <p class="acciones__nota">Recuerda: no es posible volver a un par anterior.</p>
         </footer>
     </form>
 
