@@ -1,6 +1,7 @@
-/* Wizard de la evaluación: muestra un par a la vez, sin retroceso.
+/* Wizard de la evaluación: muestra una página de pares a la vez, sin retroceso.
+   Una vez marcado un par, su respuesta queda FIJA (1 clic, no se puede cambiar).
    El avance y las respuestas se persisten en sessionStorage para que una
-   recarga accidental no pierda 25 minutos de prueba. */
+   recarga accidental no pierda la prueba. */
 (function () {
     'use strict';
 
@@ -9,11 +10,21 @@
     var CLAVE_SELECCION = 'thurstone_seleccion';
 
     var formulario = document.getElementById('formularioEvaluacion');
-    var pares = Array.prototype.slice.call(document.querySelectorAll('.pregunta'));
+    var items = Array.prototype.slice.call(document.querySelectorAll('.par-item'));
     var botonSiguiente = document.getElementById('botonSiguiente');
-    var numeroPregunta = document.getElementById('numeroPregunta');
+    var numeroPagina = document.getElementById('numeroPagina');
+    var totalPaginasSpan = document.getElementById('totalPaginas');
     var rellenoProgreso = document.getElementById('rellenoProgreso');
     var aviso = document.getElementById('avisoSeleccion');
+
+    function paginaDe(item) {
+        return Number(item.getAttribute('data-pagina'));
+    }
+
+    var totalPaginas = items.reduce(function (max, item) {
+        return Math.max(max, paginaDe(item));
+    }, 0) + 1;
+    totalPaginasSpan.textContent = String(totalPaginas);
 
     /* --- Telemetría: timestamp de inicio (respaldo del reloj del servidor) --- */
     var inicio = Number(sessionStorage.getItem(CLAVE_INICIO));
@@ -25,28 +36,26 @@
 
     /* --- Restaurar avance tras una recarga --- */
     restaurarSelecciones();
-    var indiceActual = Math.min(
+    var paginaActual = Math.min(
         Number(sessionStorage.getItem(CLAVE_PASO)) || 0,
-        pares.length - 1
+        totalPaginas - 1
     );
-    mostrar(indiceActual);
+    mostrar(paginaActual);
 
-    /* Refuerzo visual de selección (respaldo de :has()) + persistencia */
+    /* Al marcar una opción se bloquea el par (1 clic y queda fijo) + persistencia */
     formulario.addEventListener('change', function (evento) {
         var input = evento.target;
         if (input.type !== 'radio' || input.name.indexOf('par_') !== 0) {
             return;
         }
-        var grupo = input.closest('.par');
-        Array.prototype.forEach.call(
-            grupo.querySelectorAll('.opcion'),
-            function (opcion) { opcion.classList.remove('seleccionada'); });
-        input.closest('.opcion').classList.add('seleccionada');
-        ocultarAviso();
+        bloquearGrupo(input.closest('.par'), input);
+        if (paginaCompleta(paginaActual)) {
+            ocultarAviso();
+        }
         guardarSelecciones();
     });
 
-    /* Enter no debe enviar el formulario antes del último par */
+    /* Enter no debe enviar el formulario antes de la última página */
     formulario.addEventListener('keydown', function (evento) {
         if (evento.key === 'Enter') {
             evento.preventDefault();
@@ -54,38 +63,58 @@
     });
 
     botonSiguiente.addEventListener('click', function () {
-        // No se puede avanzar sin responder: "ninguna" es una opción explícita,
-        // así que un par en blanco siempre es una omisión, no una respuesta.
-        if (!parRespondido(indiceActual)) {
+        // No se puede avanzar dejando pares en blanco: "ninguna" es una opción
+        // explícita, así que un par sin marcar siempre es una omisión.
+        if (!paginaCompleta(paginaActual)) {
             mostrarAviso();
             return;
         }
-        if (indiceActual >= pares.length - 1) {
+        if (paginaActual >= totalPaginas - 1) {
             botonSiguiente.disabled = true;
             formulario.submit();
             return;
         }
-        indiceActual += 1;
-        sessionStorage.setItem(CLAVE_PASO, String(indiceActual));
-        mostrar(indiceActual);
+        paginaActual += 1;
+        sessionStorage.setItem(CLAVE_PASO, String(paginaActual));
+        mostrar(paginaActual);
     });
 
-    function mostrar(indice) {
-        pares.forEach(function (par, i) {
-            par.classList.toggle('activa', i === indice);
+    /* Marca la opción elegida y deshabilita las otras tres del par: así la
+       respuesta no se puede cambiar. La elegida queda habilitada para que su
+       valor siga viajando en el POST (los controles deshabilitados no se envían). */
+    function bloquearGrupo(grupo, elegido) {
+        Array.prototype.forEach.call(grupo.querySelectorAll('.opcion'), function (opcion) {
+            var radio = opcion.querySelector('input[type="radio"]');
+            var esElegido = radio === elegido;
+            opcion.classList.toggle('seleccionada', esElegido);
+            if (!esElegido) {
+                radio.disabled = true;
+            }
         });
-        numeroPregunta.textContent = String(indice + 1);
+    }
+
+    function itemsDePagina(pagina) {
+        return items.filter(function (item) { return paginaDe(item) === pagina; });
+    }
+
+    function mostrar(pagina) {
+        items.forEach(function (item) {
+            item.classList.toggle('activa', paginaDe(item) === pagina);
+        });
+        numeroPagina.textContent = String(pagina + 1);
         rellenoProgreso.style.width =
-            Math.round(((indice + 1) / pares.length) * 100) + '%';
-        botonSiguiente.textContent = indice === pares.length - 1
+            Math.round(((pagina + 1) / totalPaginas) * 100) + '%';
+        botonSiguiente.textContent = pagina === totalPaginas - 1
             ? 'Finalizar y ver resultados'
             : 'Siguiente';
         ocultarAviso();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function parRespondido(indice) {
-        return !!pares[indice].querySelector('input[type="radio"]:checked');
+    function paginaCompleta(pagina) {
+        return itemsDePagina(pagina).every(function (item) {
+            return item.querySelector('input[type="radio"]:checked');
+        });
     }
 
     function mostrarAviso() {
@@ -116,7 +145,7 @@
                 'input[name="' + CSS.escape(nombre) + '"][value="' + CSS.escape(datos[nombre]) + '"]');
             if (radio) {
                 radio.checked = true;
-                radio.closest('.opcion').classList.add('seleccionada');
+                bloquearGrupo(radio.closest('.par'), radio);
             }
         });
     }

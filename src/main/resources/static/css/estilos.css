@@ -373,6 +373,48 @@ body {
     background: var(--azul-oscuro);
 }
 
+/* Agrupamiento: cada página muestra varios pares (.par-item). Los de otras
+   páginas quedan ocultos pero su respuesta sigue en el formulario. */
+.par-item {
+    display: none;
+}
+
+.par-item.activa {
+    display: block;
+}
+
+.par-item.activa + .par-item.activa {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--borde-neutro);
+}
+
+.par-item__numero {
+    margin: 0 0 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+}
+
+/* Tras marcar, las otras opciones del par quedan deshabilitadas: 1 clic y la
+   respuesta no se puede cambiar (aunque haya varios pares por página). */
+.opcion:has(input:disabled) {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.par:has(input:disabled) .opcion.seleccionada {
+    cursor: default;
+}
+
+.par:has(input:disabled) .opcion.seleccionada:hover {
+    transform: none;
+    box-shadow: none;
+}
+
 .acciones {
     margin-top: 36px;
     display: flex;

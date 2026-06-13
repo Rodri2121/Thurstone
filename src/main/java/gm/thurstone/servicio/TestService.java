@@ -5,8 +5,13 @@ import gm.thurstone.modelo.Par;
 import gm.thurstone.modelo.ResultadoArea;
 import gm.thurstone.modelo.Respuesta;
 import gm.thurstone.modelo.Tarea;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -16,60 +21,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static gm.thurstone.modelo.AreaInteres.A;
-import static gm.thurstone.modelo.AreaInteres.C;
-import static gm.thurstone.modelo.AreaInteres.CB;
-import static gm.thurstone.modelo.AreaInteres.CF;
-import static gm.thurstone.modelo.AreaInteres.Cp;
-import static gm.thurstone.modelo.AreaInteres.E;
-import static gm.thurstone.modelo.AreaInteres.H;
-import static gm.thurstone.modelo.AreaInteres.L;
-import static gm.thurstone.modelo.AreaInteres.M;
-import static gm.thurstone.modelo.AreaInteres.P;
-
 @Service
 public class TestService {
 
-    // Subconjunto de DEMO con TAREAS (acciones de cada carrera), no nombres de
-    // ocupaciones. El psicólogo entregará el contenido real: una matriz de 20
-    // carreras universitarias (~190 pares). Para ampliarlo basta extender esta
-    // lista. En la demo cada carrera aparece dos veces —una como primera y otra
-    // como segunda opción— para que el perfil quede equilibrado.
-    private static final List<Par> PARES = List.of(
-            par(1, "Medir la reacción de una sustancia en el laboratorio", CF,
-                    "Atender y diagnosticar a un paciente", CB),
-            par(2, "Estudiar el comportamiento de los animales", CB,
-                    "Resolver un problema mediante cálculos matemáticos", Cp),
-            par(3, "Analizar grandes volúmenes de datos y estadísticas", Cp,
-                    "Administrar las cuentas y finanzas de un negocio", C),
-            par(4, "Negociar la compra y venta de productos", C,
-                    "Dirigir y coordinar a un equipo de personas", E),
-            par(5, "Tomar decisiones para administrar una empresa", E,
-                    "Convencer a una audiencia con un discurso", P),
-            par(6, "Defender una postura argumentando con firmeza", P,
-                    "Redactar un reportaje o artículo", L),
-            par(7, "Escribir y corregir textos y publicaciones", L,
-                    "Ayudar a personas en situación vulnerable", H),
-            par(8, "Orientar y acompañar a quien lo necesita", H,
-                    "Crear una obra visual o una pintura", A),
-            par(9, "Esculpir o modelar una figura artística", A,
-                    "Interpretar una pieza con un instrumento", M),
-            par(10, "Componer o dirigir una obra musical", M,
-                    "Calcular las fuerzas que soporta una estructura", CF));
+    // Matriz completa de la Escala de Thurstone (100 pares) cargada desde un CSV
+    // editable: numero;area1;ocupacion1;area2;ocupacion2. El área define el
+    // puntaje; la ocupación es solo texto (pendiente de cambiar por tareas).
+    private static final String RUTA_DATOS = "datos/pares.csv";
 
-    // Puntaje crudo confirmado por el psicólogo: cada círculo marcado vale 1
-    // punto. "Ambas" marca dos círculos (1 a cada carrera); "ninguna" (X) no
-    // suma. El perfil se grafica directo en una escala 0–20 por carrera, sin
-    // baremos ni percentiles.
+    // Puntaje crudo: cada círculo marcado vale 1 punto. "Ambas" marca dos
+    // círculos (1 a cada carrera); "ninguna" (X) no suma. Perfil 0-20 por área.
     private static final int PUNTOS_POR_CIRCULO = 1;
 
     private static final String[] PASTELES = {"pastel-1", "pastel-2", "pastel-3"};
 
+    private static final List<Par> PARES = cargarPares();
     private static final Set<Integer> NUMEROS_VALIDOS =
             PARES.stream().map(Par::numero).collect(Collectors.toUnmodifiableSet());
     private static final Map<AreaInteres, Integer> APARICIONES_POR_AREA = contarApariciones(PARES);
-    // Máximo común para que todas las barras compartan un mismo eje: en el test
-    // real cada carrera se compara la misma cantidad de veces (escala 0–20).
+    // Máximo común para que todas las barras compartan el eje 0-20 (cada área se
+    // compara la misma cantidad de veces en la matriz completa).
     private static final int MAX_APARICIONES =
             APARICIONES_POR_AREA.isEmpty() ? 0 : Collections.max(APARICIONES_POR_AREA.values());
 
@@ -105,10 +76,10 @@ public class TestService {
 
     /**
      * Regla anti-sabotaje validada en servidor (el JS del cliente es evitable).
-     * El psicólogo definió como conductas erráticas que anulan la prueba: marcar
-     * todo con "X" (todo NINGUNA), marcar todos los círculos (todo AMBAS) o
-     * dejar todo en blanco (incompleto). Se generaliza a: prueba incompleta o
-     * todas las respuestas idénticas (no discrimina entre carreras).
+     * Conductas erráticas que anulan la prueba (según el psicólogo): marcar todo
+     * con "X" (todo NINGUNA), todos los círculos (todo AMBAS) o dejar todo en
+     * blanco (incompleto). Se generaliza a: prueba incompleta o todas las
+     * respuestas idénticas (no discrimina entre carreras).
      */
     public boolean esSabotaje(Map<Integer, Respuesta> respuestas) {
         if (respuestas.size() < PARES.size()) {
@@ -119,9 +90,9 @@ public class TestService {
     }
 
     /**
-     * Calcula el perfil por carrera (puntaje crudo), lo ordena de mayor a menor
-     * y asigna la clase CSS de colorimetría: 1.º azul oscuro, 2.º azul claro,
-     * resto pasteles.
+     * Calcula el perfil por carrera (puntaje crudo 0-20), lo ordena de mayor a
+     * menor y asigna la clase CSS de colorimetría: 1.º azul oscuro, 2.º azul
+     * claro, resto pasteles.
      */
     public List<ResultadoArea> calcularResultados(Map<Integer, Respuesta> respuestas) {
         Map<AreaInteres, Integer> puntos = new EnumMap<>(AreaInteres.class);
@@ -165,8 +136,32 @@ public class TestService {
         return resultados;
     }
 
-    private static Par par(int numero, String desc1, AreaInteres area1, String desc2, AreaInteres area2) {
-        return new Par(numero, new Tarea(desc1, area1), new Tarea(desc2, area2));
+    private static List<Par> cargarPares() {
+        List<Par> lista = new ArrayList<>();
+        try (BufferedReader lector = new BufferedReader(new InputStreamReader(
+                new ClassPathResource(RUTA_DATOS).getInputStream(), StandardCharsets.UTF_8))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String fila = linea.trim();
+                if (fila.isEmpty() || fila.startsWith("#")) {
+                    continue;
+                }
+                String[] campos = fila.split(";");
+                if (campos.length < 5) {
+                    throw new IllegalStateException("Línea con menos de 5 campos en " + RUTA_DATOS + ": " + fila);
+                }
+                int numero = Integer.parseInt(campos[0].trim());
+                Tarea primera = new Tarea(campos[2].trim(), AreaInteres.valueOf(campos[1].trim()));
+                Tarea segunda = new Tarea(campos[4].trim(), AreaInteres.valueOf(campos[3].trim()));
+                lista.add(new Par(numero, primera, segunda));
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudieron cargar los pares desde " + RUTA_DATOS, e);
+        }
+        if (lista.isEmpty()) {
+            throw new IllegalStateException("El archivo de pares está vacío: " + RUTA_DATOS);
+        }
+        return List.copyOf(lista);
     }
 
     private static Map<AreaInteres, Integer> contarApariciones(List<Par> pares) {

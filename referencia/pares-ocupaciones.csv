@@ -1,0 +1,108 @@
+# Escala de Intereses de Thurstone — matriz completa 10x10 (100 pares).
+# Formato: numero;area1;ocupacion1;area2;ocupacion2
+# area1 = área de la columna (opción 1); area2 = área de la fila (opción 2).
+# El área determina el puntaje (NO se muestra al evaluado); la ocupación es
+# solo el texto que se ve. NOTA: el profesor indicó cambiar las ocupaciones por
+# TAREAS/acciones de la carrera — basta reemplazar las columnas ocupacion1/2.
+# Los nombres son transcripción best-effort del PDF (verificar ortografía); las
+# áreas son exactas por posición en la rejilla.
+1;CF;Ciencias Físicas;CF;Ingeniero Civil
+2;CB;Médico;CF;Ciencias Físicas
+3;Cp;Matemático;CF;Químico
+4;C;Banquero;CF;Diseñador de máquinas
+5;E;Director de empresas;CF;Ingeniero Civil
+6;P;Abogado defensor;CF;Diseñador de Puentes
+7;L;Periodista;CF;Aviador
+8;H;Bienestar infantil;CF;Diseñador de aviones
+9;A;Artista comercial;CF;Mecánico
+10;M;Director de orquesta;CF;Inventor
+11;CF;Mecánico;CB;Veterinario
+12;CB;Nutrición;CB;Zoólogo
+13;Cp;Estadística;CB;Botánico
+14;C;Negocios;CB;Nutrición
+15;E;Alcalde;CB;Biólogo
+16;P;Árbitro de trabajo;CB;Seguridad pública
+17;L;Corresponsal en el extranjero;CB;Agricultor
+18;H;Sacerdote;CB;Médico
+19;A;Decorador;CB;Bacteriólogo
+20;M;Compositor de música;CB;Cirujano
+21;CF;Inventor;Cp;Agente de compras
+22;CB;Dentista;Cp;Estadística
+23;Cp;Analista de precios;Cp;Especialista en impuestos
+24;C;Industrial;Cp;Pagador
+25;E;Juez;Cp;Contador
+26;P;Propagandista;Cp;Cajero
+27;L;Profesor de lenguaje;Cp;Estadístico de seguros
+28;H;Orientador vocacional;Cp;Contador
+29;A;Artista;Cp;Matemático
+30;M;Saxofonista;Cp;Cajero
+31;CF;Químico;C;Comerciante de automóviles
+32;CB;Veterinario;C;Industrial
+33;Cp;Contador;C;Revendedor
+34;C;Revendedor;C;Industrial
+35;E;Gobernador;C;Comerciante al por mayor
+36;P;Orador político;C;Banquero
+37;L;Editor de periódico;C;Importador
+38;H;Tribunal de menores;C;Prestamista
+39;A;Pintor retratista;C;Contratista
+40;M;Violinista;C;Comerciante de inmuebles
+41;CF;Electricidad;E;Director de museo
+42;CB;Zoólogo;E;Supervisor de fábrica
+43;Cp;Estadística de seguros;E;Director de empresas
+44;C;Agente de inversiones;E;Gobernador
+45;E;Gerente de hotel;E;Alcalde
+46;P;Redactor de publicidad;E;Oficial del ejército
+47;L;Escritor de revistas;E;Capitán de barco
+48;H;Misionero;E;Director de escuelas
+49;A;Escultor;E;Juez
+50;M;Cantante;E;Director de hospital
+51;CF;Aviador;P;Abogado defensor
+52;CB;Bacteriólogo;P;Redactor de publicidad
+53;Cp;Pagador;P;Árbitro de trabajo
+54;C;Comerciante de inmuebles;P;Orador político
+55;E;Oficial de guardacostas;P;Escritor de editoriales
+56;P;Abogado defensor;P;Orador político
+57;L;Historiador;P;Visitador médico
+58;H;Trabajador social;P;Vendedor de seguros
+59;A;Dibujante de tiras cómicas;P;Propagandista
+60;M;Director de coros;P;Vendedor
+61;CF;Ciencias físicas;L;Escritor
+62;CB;Botánico;L;Novelista
+63;Cp;Analista de precios;L;Conferencista
+64;C;Comisionista;L;Licenciado en leyes
+65;E;Director de hospital;L;Periodista
+66;P;Vendedor;L;Catedrático universitario
+67;L;Editor de periódico;L;Escritor de revistas
+68;H;Rehabilitación de ciegos;L;Novelista
+69;A;Arquitecto;L;Historiador
+70;M;Compositor de canciones;L;Corresponsal en el extranjero
+71;CF;Astrónomo;H;Sacerdote
+72;CB;Agricultor;H;Asilo de ancianos
+73;Cp;Agente de compras;H;Tribunal de menores
+74;C;Comerciante al por menor;H;Orientador vocacional
+75;E;Director de escuelas;H;Trabajador social
+76;P;Redactor de publicidad;H;Rehabilitación de ciegos
+77;L;Licenciado en leyes;H;Cruz roja
+78;H;Bienestar infantil;H;Banco de sangre
+79;A;Director de teatro;H;Misionero
+80;M;Organista;H;Bienestar infantil
+81;CF;Diseñador de máquinas;A;Arquitecto
+82;CB;Cirujano;A;Escultor
+83;Cp;Especialista en impuestos;A;Diseñador de tejidos
+84;C;Comerciante al por mayor;A;Decorador
+85;E;Capitán de barco;A;Artista comercial
+86;P;Comentarista de radio;A;Director de teatro
+87;L;Escritor;A;Artista
+88;H;Cruz roja;A;Pintor retratista
+89;A;Artista comercial;A;Actor
+90;M;Maestro de música;A;Diseñador de vestidos
+91;CF;Radiotécnico;M;Maestro de música
+92;CB;Biólogo;M;Trompetista
+93;Cp;Cajero;M;Director de banda
+94;C;Agente de seguros;M;Compositor de canciones
+95;E;Supervisor de fábrica;M;Organista
+96;P;Vendedor de seguros;M;Violinista
+97;L;Conferencista;M;Compositor de música
+98;H;Asilo de ancianos;M;Cantante
+99;A;Diseñador de tejidos;M;Director de orquesta
+100;M;Pianista;M;Violinista

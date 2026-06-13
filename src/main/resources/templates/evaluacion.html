@@ -11,29 +11,28 @@
 
     <header class="progreso">
         <p class="progreso__texto">
-            Par <span id="numeroPregunta">1</span> de
-            <span id="totalPreguntas" th:text="${#lists.size(pares)}">10</span>
+            Página <span id="numeroPagina">1</span> de <span id="totalPaginas">10</span>
         </p>
         <div class="progreso__barra" aria-hidden="true">
             <div class="progreso__relleno" id="rellenoProgreso"></div>
         </div>
     </header>
 
-    <!-- Todos los pares se renderizan en el DOM; el JS muestra solo el activo.
-         Los inactivos quedan con display:none, así la respuesta marcada en cada
-         uno sigue viajando en el POST final. El área de cada ocupación NO se
-         renderiza: el mapeo ocupación→área vive solo en el servidor. -->
+    <!-- Se renderizan los 100 pares; el JS muestra solo los de la página activa.
+         Los inactivos quedan ocultos, así su respuesta sigue viajando en el POST.
+         El área de cada tarea NO se renderiza: vive solo en el servidor. -->
     <form id="formularioEvaluacion" method="post" th:action="@{/resultados}" novalidate>
         <input type="hidden" id="inicioCliente" name="inicioCliente" value="">
 
-        <section class="pregunta" th:each="par, iter : ${pares}"
-                 th:classappend="${iter.index == 0} ? 'activa'">
-            <h1 class="pregunta__titulo">¿Qué actividad prefieres?</h1>
-            <p class="pregunta__ayuda">
-                Confía en tu primer impulso. Elige la actividad que prefieras,
-                marca «ambas» si las dos te atraen o «ninguna» si no te atrae ninguna.
-            </p>
+        <p class="pregunta__ayuda">
+            Confía en tu primer impulso. En cada par elige la actividad que
+            prefieras, «ambas» si las dos te atraen o «ninguna» si no te atrae ninguna.
+            <strong>Una vez que marques una opción no podrás cambiarla.</strong>
+        </p>
 
+        <section class="par-item" th:each="par, iter : ${pares}"
+                 th:data-pagina="${iter.index / paresPorPagina}">
+            <p class="par-item__numero">Par <span th:text="${iter.count}">1</span></p>
             <fieldset class="par">
                 <legend class="visualmente-oculto">
                     Par <span th:text="${iter.count}">1</span>: elige una opción
@@ -69,9 +68,9 @@
         <footer class="acciones">
             <button type="button" id="botonSiguiente" class="boton boton--primario">Siguiente</button>
             <p class="acciones__aviso" id="avisoSeleccion" role="alert" hidden>
-                Selecciona una opción para continuar.
+                Responde todos los pares de esta página para continuar.
             </p>
-            <p class="acciones__nota">Recuerda: no es posible volver a un par anterior.</p>
+            <p class="acciones__nota">Recuerda: no es posible volver a una página anterior.</p>
         </footer>
     </form>
 

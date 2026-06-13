@@ -13,34 +13,29 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Verifica el motor de cálculo del test (puntaje por área, orden, colorimetría,
- * anti-sabotaje y descarte de parámetros manipulados). No necesita el contexto
- * de Spring: {@link TestService} es autónomo.
+ * Verifica el motor de cálculo del test (puntaje crudo por carrera, orden,
+ * colorimetría, anti-sabotaje y descarte de parámetros manipulados) sobre la
+ * matriz completa cargada desde el CSV. No necesita el contexto de Spring.
  */
 class TestServiceTest {
 
     private final TestService servicio = new TestService();
 
     @Test
-    void cargaElSubconjuntoDePares() {
-        assertEquals(10, servicio.totalPares());
+    void cargaLaMatrizCompleta() {
+        assertEquals(100, servicio.totalPares());
     }
 
     @Test
     void calculaPerfilOrdenadoConColorimetria() {
-        // Respuestas pensadas para que "Ciencias Físicas" (CF) gane en solitario:
-        // es la primera del par 1 y la segunda del par 10.
+        // Todas "ninguna" salvo dos pares cuya opción 1 es Ciencias Físicas
+        // (pares 1 y 11): así CF queda en primer lugar con 2 puntos.
         Map<Integer, Respuesta> respuestas = new LinkedHashMap<>();
-        respuestas.put(1, Respuesta.PRIMERA);   // +1 CF
-        respuestas.put(10, Respuesta.SEGUNDA);  // +1 CF  -> CF = 2 (máximo posible: 2 apariciones)
-        respuestas.put(2, Respuesta.PRIMERA);
-        respuestas.put(3, Respuesta.SEGUNDA);
-        respuestas.put(4, Respuesta.SEGUNDA);
-        respuestas.put(5, Respuesta.SEGUNDA);
-        respuestas.put(6, Respuesta.AMBAS);
-        respuestas.put(7, Respuesta.NINGUNA);
-        respuestas.put(8, Respuesta.PRIMERA);
-        respuestas.put(9, Respuesta.SEGUNDA);
+        for (int i = 1; i <= servicio.totalPares(); i++) {
+            respuestas.put(i, Respuesta.NINGUNA);
+        }
+        respuestas.put(1, Respuesta.PRIMERA);
+        respuestas.put(11, Respuesta.PRIMERA);
 
         List<ResultadoArea> resultados = servicio.calcularResultados(respuestas);
 
@@ -49,7 +44,7 @@ class TestServiceTest {
         ResultadoArea primera = resultados.get(0);
         assertEquals("Ciencias Físicas", primera.area());
         assertEquals(2, primera.puntaje());
-        assertEquals(100, primera.porcentaje());
+        assertEquals(10, primera.porcentaje(), "2 de 20 puntos posibles = 10%");
         assertEquals("nivel-1", primera.claseCss());
         assertEquals("nivel-2", resultados.get(1).claseCss());
         assertEquals("pastel-1", resultados.get(2).claseCss());

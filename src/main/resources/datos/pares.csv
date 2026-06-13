@@ -1,0 +1,107 @@
+# Escala de Intereses de Thurstone — matriz completa 10x10 (100 pares).
+# Formato: numero;area1;tarea1;area2;tarea2
+# Las TAREAS/acciones son un BORRADOR para revisión del psicólogo (sustituyen
+# los nombres de ocupaciones). Las ocupaciones originales están en
+# referencia/pares-ocupaciones.csv (mismo "numero" por fila para comparar).
+# El área determina el puntaje y NO se muestra; las áreas son idénticas a la
+# versión de ocupaciones, así que cambiar el texto NO afecta el cálculo.
+1;CF;Investigar las leyes de la materia y la energía;CF;Calcular la estructura de un puente
+2;CB;Diagnosticar y tratar a un paciente;CF;Investigar las leyes de la materia y la energía
+3;Cp;Resolver problemas con cálculos abstractos;CF;Mezclar sustancias y medir sus reacciones
+4;C;Gestionar préstamos e inversiones de un banco;CF;Diseñar el mecanismo de una máquina
+5;E;Dirigir una empresa y su personal;CF;Calcular la estructura de un puente
+6;P;Defender un caso ante un tribunal;CF;Trazar los planos de un puente
+7;L;Investigar y redactar una noticia;CF;Pilotar una aeronave
+8;H;Velar por el bienestar de los niños;CF;Diseñar la estructura de un avión
+9;A;Diseñar imágenes para publicidad;CF;Reparar el motor de una máquina
+10;M;Dirigir una orquesta;CF;Crear un aparato que no existe
+11;CF;Reparar el motor de una máquina;CB;Atender la salud de los animales
+12;CB;Planear la alimentación de una persona;CB;Estudiar el comportamiento de los animales
+13;Cp;Analizar datos y sacar estadísticas;CB;Estudiar y clasificar las plantas
+14;C;Manejar un negocio propio;CB;Planear la alimentación de una persona
+15;E;Gobernar una ciudad;CB;Investigar los seres vivos en el laboratorio
+16;P;Mediar en un conflicto laboral;CB;Velar por la seguridad de la comunidad
+17;L;Cubrir noticias desde otro país;CB;Cultivar la tierra y cosechar alimentos
+18;H;Guiar espiritualmente a las personas;CB;Diagnosticar y tratar a un paciente
+19;A;Decorar y ambientar espacios;CB;Analizar microorganismos con el microscopio
+20;M;Componer una pieza musical;CB;Operar a un paciente en quirófano
+21;CF;Crear un aparato que no existe;Cp;Calcular y gestionar las compras
+22;CB;Tratar y cuidar la dentadura;Cp;Analizar datos y sacar estadísticas
+23;Cp;Analizar y calcular precios;Cp;Calcular impuestos y declaraciones
+24;C;Dirigir la producción de una industria;Cp;Calcular y registrar los pagos
+25;E;Dictar sentencia en un tribunal;Cp;Llevar las cuentas y registros financieros
+26;P;Crear campañas para convencer al público;Cp;Manejar dinero y cuadrar la caja
+27;L;Enseñar el uso del lenguaje;Cp;Calcular probabilidades y riesgos de seguros
+28;H;Orientar a jóvenes en su vocación;Cp;Llevar las cuentas y registros financieros
+29;A;Crear una obra de arte;Cp;Resolver problemas con cálculos abstractos
+30;M;Tocar el saxofón;Cp;Manejar dinero y cuadrar la caja
+31;CF;Mezclar sustancias y medir sus reacciones;C;Vender automóviles
+32;CB;Atender la salud de los animales;C;Dirigir la producción de una industria
+33;Cp;Llevar las cuentas y registros financieros;C;Comprar y revender mercancía
+34;C;Comprar y revender mercancía;C;Dirigir la producción de una industria
+35;E;Gobernar una región;C;Vender mercancía al por mayor
+36;P;Dar un discurso para convencer a la gente;C;Gestionar préstamos e inversiones de un banco
+37;L;Editar y corregir textos de un periódico;C;Importar y comercializar productos
+38;H;Atender casos de menores en riesgo;C;Prestar dinero con intereses
+39;A;Pintar el retrato de una persona;C;Contratar y gestionar obras
+40;M;Tocar el violín;C;Comprar y vender propiedades
+41;CF;Instalar y reparar circuitos eléctricos;E;Administrar un museo
+42;CB;Estudiar el comportamiento de los animales;E;Supervisar el trabajo en una fábrica
+43;Cp;Calcular probabilidades y riesgos de seguros;E;Dirigir una empresa y su personal
+44;C;Asesorar inversiones de dinero;E;Gobernar una región
+45;E;Administrar un hotel;E;Gobernar una ciudad
+46;P;Redactar anuncios publicitarios;E;Comandar una unidad militar
+47;L;Escribir artículos para revistas;E;Comandar la tripulación de un barco
+48;H;Ayudar a comunidades necesitadas;E;Dirigir una institución educativa
+49;A;Esculpir una figura en piedra o metal;E;Dictar sentencia en un tribunal
+50;M;Cantar ante un público;E;Administrar un hospital
+51;CF;Pilotar una aeronave;P;Defender un caso ante un tribunal
+52;CB;Analizar microorganismos con el microscopio;P;Redactar anuncios publicitarios
+53;Cp;Calcular y registrar los pagos;P;Mediar en un conflicto laboral
+54;C;Comprar y vender propiedades;P;Dar un discurso para convencer a la gente
+55;E;Comandar operaciones de guardacostas;P;Escribir un editorial de opinión
+56;P;Defender un caso ante un tribunal;P;Dar un discurso para convencer a la gente
+57;L;Investigar y narrar hechos históricos;P;Promover productos médicos a doctores
+58;H;Apoyar a familias en situación difícil;P;Convencer a alguien de contratar un seguro
+59;A;Dibujar historietas;P;Crear campañas para convencer al público
+60;M;Dirigir un coro;P;Convencer a un cliente de comprar
+61;CF;Investigar las leyes de la materia y la energía;L;Escribir un libro o relato
+62;CB;Estudiar y clasificar las plantas;L;Escribir una novela
+63;Cp;Analizar y calcular precios;L;Preparar y dar conferencias
+64;C;Vender productos a comisión;L;Estudiar e interpretar textos legales
+65;E;Administrar un hospital;L;Investigar y redactar una noticia
+66;P;Convencer a un cliente de comprar;L;Enseñar e investigar en la universidad
+67;L;Editar y corregir textos de un periódico;L;Escribir artículos para revistas
+68;H;Rehabilitar a personas con discapacidad visual;L;Escribir una novela
+69;A;Dibujar el diseño de un edificio;L;Investigar y narrar hechos históricos
+70;M;Componer canciones;L;Cubrir noticias desde otro país
+71;CF;Observar y estudiar los astros;H;Guiar espiritualmente a las personas
+72;CB;Cultivar la tierra y cosechar alimentos;H;Cuidar a personas adultas mayores
+73;Cp;Calcular y gestionar las compras;H;Atender casos de menores en riesgo
+74;C;Atender una tienda al detalle;H;Orientar a jóvenes en su vocación
+75;E;Dirigir una institución educativa;H;Apoyar a familias en situación difícil
+76;P;Redactar anuncios publicitarios;H;Rehabilitar a personas con discapacidad visual
+77;L;Estudiar e interpretar textos legales;H;Brindar auxilio en emergencias
+78;H;Velar por el bienestar de los niños;H;Gestionar donaciones de sangre
+79;A;Dirigir una obra de teatro;H;Ayudar a comunidades necesitadas
+80;M;Tocar el órgano;H;Velar por el bienestar de los niños
+81;CF;Diseñar el mecanismo de una máquina;A;Dibujar el diseño de un edificio
+82;CB;Operar a un paciente en quirófano;A;Esculpir una figura en piedra o metal
+83;Cp;Calcular impuestos y declaraciones;A;Diseñar telas y estampados
+84;C;Vender mercancía al por mayor;A;Decorar y ambientar espacios
+85;E;Comandar la tripulación de un barco;A;Diseñar imágenes para publicidad
+86;P;Comentar y opinar en la radio;A;Dirigir una obra de teatro
+87;L;Escribir un libro o relato;A;Crear una obra de arte
+88;H;Brindar auxilio en emergencias;A;Pintar el retrato de una persona
+89;A;Diseñar imágenes para publicidad;A;Actuar en una obra o película
+90;M;Enseñar a tocar un instrumento;A;Diseñar ropa y vestuario
+91;CF;Reparar equipos electrónicos de radio;M;Enseñar a tocar un instrumento
+92;CB;Investigar los seres vivos en el laboratorio;M;Tocar la trompeta
+93;Cp;Manejar dinero y cuadrar la caja;M;Dirigir una banda musical
+94;C;Vender pólizas de seguro;M;Componer canciones
+95;E;Supervisar el trabajo en una fábrica;M;Tocar el órgano
+96;P;Convencer a alguien de contratar un seguro;M;Tocar el violín
+97;L;Preparar y dar conferencias;M;Componer una pieza musical
+98;H;Cuidar a personas adultas mayores;M;Cantar ante un público
+99;A;Diseñar telas y estampados;M;Dirigir una orquesta
+100;M;Tocar el piano;M;Tocar el violín

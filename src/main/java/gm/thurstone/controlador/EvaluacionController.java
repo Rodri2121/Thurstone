@@ -20,6 +20,9 @@ public class EvaluacionController {
 
     private static final String ATRIBUTO_INICIO = "inicioEvaluacion";
 
+    // Cuántos pares se muestran por página del wizard (100 pares / 10 = 10 páginas).
+    private static final int PARES_POR_PAGINA = 10;
+
     private final TestService testService;
 
     public EvaluacionController(TestService testService) {
@@ -41,6 +44,7 @@ public class EvaluacionController {
             session.setAttribute(ATRIBUTO_INICIO, Instant.now());
         }
         model.addAttribute("pares", testService.obtenerPares());
+        model.addAttribute("paresPorPagina", PARES_POR_PAGINA);
         return "evaluacion";
     }
 
