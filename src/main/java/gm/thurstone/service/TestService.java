@@ -126,14 +126,24 @@ public class TestService {
             AreaInteres area = ordenadas.get(i).getKey();
             int puntaje = ordenadas.get(i).getValue();
             int porcentaje = MAX_APARICIONES == 0 ? 0 : (int) Math.round(puntaje * 100.0 / MAX_APARICIONES);
-            String clase = switch (i) {
-                case 0 -> "nivel-1";
-                case 1 -> "nivel-2";
-                default -> PASTELES[(i - 2) % PASTELES.length];
-            };
+            String clase = claseCssPorRanking(i);
             resultados.add(new ResultadoArea(area.getNombre(), puntaje, porcentaje, clase, area.getCarreras()));
         }
         return resultados;
+    }
+
+    /**
+     * Clase CSS de colorimetría por ranking: 0.º azul oscuro, 1.º azul claro,
+     * resto pasteles rotando. Es presentación (no cálculo de puntaje); se
+     * centraliza aquí para que la pantalla de resultados en vivo y la vista de
+     * detalle del psicólogo (que reconstruye el perfil persistido) no diverjan.
+     */
+    public static String claseCssPorRanking(int indice) {
+        return switch (indice) {
+            case 0 -> "nivel-1";
+            case 1 -> "nivel-2";
+            default -> PASTELES[(indice - 2) % PASTELES.length];
+        };
     }
 
     private static List<Par> cargarPares() {

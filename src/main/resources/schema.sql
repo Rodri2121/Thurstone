@@ -2,7 +2,7 @@
 -- El script que incluye Spring Session (schema-postgresql.sql) usa CREATE TABLE
 -- sin IF NOT EXISTS, por lo que con initialize-schema=always fallaría al
 -- reiniciar la aplicación ("la relación ya existe"). Aquí se replica de forma
--- idempotente y se ejecuta mediante spring.sql.init.mode=always.
+-- se ejecuta mediante spring.sql.init.mode=always.
 -- Las tablas de dominio (evaluacion, resultado_evaluacion) las gestiona
 -- Hibernate con spring.jpa.hibernate.ddl-auto=update.
 

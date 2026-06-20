@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina">
+<main class="contenedor contenedor--angosto">
+
+    <header class="encabezado-resultados">
+        <h1 th:text="${titulo} ?: 'Ocurrió un error'">Ocurrió un error</h1>
+    </header>
+
+    <p class="historial-vacio"
+       th:text="${mensaje} ?: (${error} ?: 'No se pudo completar la operación.')">
+        No se pudo completar la operación.
+    </p>
+
+    <div class="llamada">
+        <a class="boton boton--primario" th:href="@{/}">Volver al inicio</a>
+    </div>
+
+</main>
+</body>
+</html>

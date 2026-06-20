@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al test | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--auth">
+<main class="contenedor contenedor--angosto">
+
+    <header class="encabezado-resultados">
+        <h1>Acceso al test</h1>
+        <p class="heroe__descripcion">Ingresá la clave que te dio tu psicólogo para comenzar.</p>
+    </header>
+
+    <p class="alerta" th:if="${error}" th:text="${error}">Error</p>
+
+    <form class="formulario" method="post" th:action="@{/acceso}">
+        <div class="campo">
+            <label for="clave">Clave de acceso</label>
+            <input type="text" id="clave" name="clave" required autofocus autocomplete="off"
+                   class="clave-monospace" style="text-transform:uppercase" maxlength="8">
+        </div>
+        <button class="boton boton--primario" type="submit">Comenzar test</button>
+    </form>
+
+    <div class="llamada">
+        <a class="boton boton--secundario" th:href="@{/}">Volver al inicio</a>
+    </div>
+
+</main>
+</body>
+</html>

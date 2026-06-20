@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test asignado | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--panel">
+<main class="contenedor contenedor--angosto">
+
+    <header class="encabezado-resultados">
+        <h1>Test asignado</h1>
+    </header>
+
+    <div class="clave-caja">
+        <p>Clave de acceso para
+            <strong th:text="${evaluacion.evaluado.nombreCompleto}">Evaluado</strong>:</p>
+        <p class="clave-destacada" th:text="${evaluacion.claveAcceso}">ABCD2345</p>
+        <p class="barra-superior__usuario">
+            Entregale esta clave al evaluado. La usará en <strong>«Tengo una clave»</strong>
+            (pantalla de inicio) para rendir su test.
+        </p>
+    </div>
+
+    <div class="llamada">
+        <a class="boton boton--primario" th:href="@{/panel}">Volver al panel</a>
+        <a class="boton boton--secundario" th:href="@{/evaluaciones}">Ver historial</a>
+    </div>
+
+</main>
+</body>
+</html>

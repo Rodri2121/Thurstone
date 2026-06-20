@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--panel">
+<main class="contenedor">
+
+    <div class="barra-superior">
+        <p class="barra-superior__usuario">
+            Sesión de <strong th:text="${psicologo.nombre + ' ' + (psicologo.apellido ?: '')}">Psicólogo</strong>
+        </p>
+        <div class="barra-acciones">
+            <a class="boton boton--secundario boton--pequeno" th:href="@{/evaluaciones}">Historial de tests</a>
+            <form class="formulario-inline" method="post" th:action="@{/logout}">
+                <button class="boton boton--secundario boton--pequeno" type="submit">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <header class="encabezado-resultados">
+        <h1>Mis evaluados</h1>
+    </header>
+
+    <p class="alerta alerta--ok" th:if="${mensaje}" th:text="${mensaje}">Mensaje</p>
+
+    <div class="llamada" style="margin-top:0;margin-bottom:28px;">
+        <a class="boton boton--primario" th:href="@{/evaluados/nuevo}">+ Registrar evaluado</a>
+    </div>
+
+    <p class="historial-vacio" th:if="${#lists.isEmpty(evaluados)}">
+        Todavía no registraste evaluados. Empezá registrando uno.
+    </p>
+
+    <table class="historial" th:unless="${#lists.isEmpty(evaluados)}">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Edad</th>
+            <th>Género</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="e : ${evaluados}">
+            <td th:text="${e.nombreCompleto}">Nombre</td>
+            <td th:text="${e.correo} ?: '—'">—</td>
+            <td th:text="${e.edad} ?: '—'">—</td>
+            <td th:text="${e.genero} ?: '—'">—</td>
+            <td class="tabla-accion">
+                <form class="formulario-inline" method="post" th:action="@{/asignaciones}">
+                    <input type="hidden" name="evaluadoId" th:value="${e.id}">
+                    <button class="boton boton--primario boton--pequeno" type="submit">Asignar test</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+</body>
+</html>

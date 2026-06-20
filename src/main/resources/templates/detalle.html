@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--resultados">
+<main class="contenedor">
+
+    <header class="encabezado-resultados">
+        <h1>Resultado de
+            <span th:text="${evaluacion.evaluado.nombreCompleto}">Evaluado</span></h1>
+        <p class="dato-tiempo" th:if="${duracion != null}">
+            Tiempo total: <strong th:text="${duracion}">12 min 30 s</strong>
+        </p>
+    </header>
+
+    <!-- Prueba invalidada por sabotaje: la clave quedó inutilizable. -->
+    <div th:if="${evaluacion.estado.name() == 'INVALIDADO'}" class="historial-vacio">
+        <p>Esta prueba fue <strong>invalidada</strong> (respuestas incompletas o de sabotaje).
+            La clave quedó inutilizable; para reintentar hay que asignar un test nuevo.</p>
+    </div>
+
+    <!-- Aún sin completar (pendiente o en progreso): se muestra la clave. -->
+    <div th:if="${evaluacion.estado.name() == 'PENDIENTE' or evaluacion.estado.name() == 'EN_PROGRESO'}"
+         class="historial-vacio">
+        <p>Este test todavía no fue completado por el evaluado
+            (estado: <span th:text="${evaluacion.estado}">PENDIENTE</span>).</p>
+        <p>Clave de acceso:
+            <span class="clave-monospace" th:text="${evaluacion.claveAcceso}">ABCD2345</span></p>
+    </div>
+
+    <!-- Test completado: gráfico de perfil por área. -->
+    <div th:if="${evaluacion.estado.name() == 'COMPLETADO'}">
+        <div class="grafico" role="img"
+             aria-label="Gráfico de barras con el puntaje por área de interés, ordenado de mayor a menor">
+            <div class="grafico__columna" th:each="r : ${resultados}">
+                <div class="grafico__zona">
+                    <span class="grafico__valor" th:text="${r.puntaje}">3</span>
+                    <div class="grafico__barra" th:classappend="${r.claseCss}"
+                         th:style="'--altura:' + ${r.porcentaje} + '%'"></div>
+                </div>
+                <span class="grafico__etiqueta" th:text="${r.area}">Área</span>
+            </div>
+        </div>
+
+        <p class="mensaje-final" th:if="${resultados != null and #lists.size(resultados) > 1}">
+            Áreas de mayor interés:
+            <strong th:text="${resultados[0].area}">Área 1</strong> y
+            <strong th:text="${resultados[1].area}">Área 2</strong>.
+            <span class="mensaje-final__carreras"
+                  th:text="'Carreras afines: ' + ${resultados[0].carreras} + ' · ' + ${resultados[1].carreras}">
+                Carreras afines…
+            </span>
+        </p>
+    </div>
+
+    <div class="llamada">
+        <a class="boton boton--primario" th:href="@{/evaluaciones}">Volver al historial</a>
+        <a class="boton boton--secundario" th:href="@{/panel}">Ir al panel</a>
+    </div>
+
+</main>
+</body>
+</html>

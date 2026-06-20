@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--auth">
+<main class="contenedor contenedor--angosto">
+
+    <header class="encabezado-resultados">
+        <h1>Acceso de psicólogos</h1>
+    </header>
+
+    <p class="alerta alerta--ok" th:if="${registrado}">
+        Cuenta creada. Ya podés iniciar sesión.
+    </p>
+    <p class="alerta alerta--ok" th:if="${param.logout}">Sesión cerrada.</p>
+    <p class="alerta" th:if="${param.error}">Correo o contraseña incorrectos.</p>
+
+    <form class="formulario" method="post" th:action="@{/login}">
+        <div class="campo">
+            <label for="username">Correo</label>
+            <input type="email" id="username" name="username" required autofocus>
+        </div>
+        <div class="campo">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button class="boton boton--primario" type="submit">Ingresar</button>
+    </form>
+
+    <p class="auth-cambio">¿No tenés cuenta? <a th:href="@{/registro}">Registrate</a></p>
+
+    <div class="llamada">
+        <a class="boton boton--secundario" th:href="@{/}">Volver al inicio</a>
+    </div>
+
+</main>
+</body>
+</html>

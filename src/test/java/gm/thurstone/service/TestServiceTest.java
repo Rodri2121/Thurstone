@@ -1,5 +1,6 @@
 package gm.thurstone.service;
 
+import gm.thurstone.model.Par;
 import gm.thurstone.model.Respuesta;
 import gm.thurstone.model.ResultadoArea;
 import org.junit.jupiter.api.Test;
@@ -13,29 +14,29 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Verifica el motor de cálculo del test (puntaje crudo por carrera, orden,
- * colorimetría, anti-sabotaje y descarte de parámetros manipulados) sobre la
- * matriz completa cargada desde el CSV. No necesita el contexto de Spring.
+ * Verifica el motor de cálculo del test (puntaje crudo por área, orden,
+ * colorimetría, anti-sabotaje y descarte de parámetros manipulados) sobre el
+ * subconjunto balanceado de 30 pares cargado desde el CSV.
  */
 class TestServiceTest {
 
     private final TestService servicio = new TestService();
 
     @Test
-    void cargaLaMatrizCompleta() {
-        assertEquals(100, servicio.totalPares());
+    void cargaElSubconjuntoBalanceado() {
+        assertEquals(30, servicio.totalPares());
     }
 
     @Test
     void calculaPerfilOrdenadoConColorimetria() {
-        // Todas "ninguna" salvo dos pares cuya opción 1 es Ciencias Físicas
-        // (pares 1 y 11): así CF queda en primer lugar con 2 puntos.
+        // Todas "ninguna" salvo dos pares cuya primera actividad es Ciencias
+        // Físicas (números 71 y 81): así CF queda primero con 2 puntos.
         Map<Integer, Respuesta> respuestas = new LinkedHashMap<>();
-        for (int i = 1; i <= servicio.totalPares(); i++) {
-            respuestas.put(i, Respuesta.NINGUNA);
+        for (Par par : servicio.obtenerPares()) {
+            respuestas.put(par.numero(), Respuesta.NINGUNA);
         }
-        respuestas.put(1, Respuesta.PRIMERA);
-        respuestas.put(11, Respuesta.PRIMERA);
+        respuestas.put(71, Respuesta.PRIMERA);
+        respuestas.put(81, Respuesta.PRIMERA);
 
         List<ResultadoArea> resultados = servicio.calcularResultados(respuestas);
 
@@ -44,7 +45,7 @@ class TestServiceTest {
         ResultadoArea primera = resultados.get(0);
         assertEquals("Ciencias Físicas", primera.area());
         assertEquals(2, primera.puntaje());
-        assertEquals(10, primera.porcentaje(), "2 de 20 puntos posibles = 10%");
+        assertEquals(33, primera.porcentaje(), "2 de 6 puntos posibles ≈ 33%");
         assertEquals("nivel-1", primera.claseCss());
         assertEquals("nivel-2", resultados.get(1).claseCss());
         assertEquals("pastel-1", resultados.get(2).claseCss());
@@ -62,15 +63,15 @@ class TestServiceTest {
 
         // Completa pero respondiendo siempre lo mismo: no discrimina.
         Map<Integer, Respuesta> todoIgual = new LinkedHashMap<>();
-        for (int i = 1; i <= servicio.totalPares(); i++) {
-            todoIgual.put(i, Respuesta.AMBAS);
+        for (Par par : servicio.obtenerPares()) {
+            todoIgual.put(par.numero(), Respuesta.AMBAS);
         }
         assertTrue(servicio.esSabotaje(todoIgual));
 
         // Completa y con variación: válida.
         Map<Integer, Respuesta> variada = new LinkedHashMap<>();
-        for (int i = 1; i <= servicio.totalPares(); i++) {
-            variada.put(i, i % 2 == 0 ? Respuesta.PRIMERA : Respuesta.SEGUNDA);
+        for (Par par : servicio.obtenerPares()) {
+            variada.put(par.numero(), par.numero() % 2 == 0 ? Respuesta.PRIMERA : Respuesta.SEGUNDA);
         }
         assertFalse(servicio.esSabotaje(variada));
     }
@@ -78,14 +79,14 @@ class TestServiceTest {
     @Test
     void parsearDescartaParametrosManipulados() {
         Map<String, String> parametros = new LinkedHashMap<>();
-        parametros.put("par_1", "PRIMERA");
+        parametros.put("par_2", "PRIMERA");
         parametros.put("par_999", "PRIMERA");   // número de par inexistente
-        parametros.put("par_2", "BASURA");      // valor de respuesta inválido
+        parametros.put("par_3", "BASURA");      // valor de respuesta inválido
         parametros.put("inicioCliente", "123"); // parámetro ajeno
 
         Map<Integer, Respuesta> respuestas = servicio.parsearRespuestas(parametros);
 
         assertEquals(1, respuestas.size());
-        assertEquals(Respuesta.PRIMERA, respuestas.get(1));
+        assertEquals(Respuesta.PRIMERA, respuestas.get(2));
     }
 }

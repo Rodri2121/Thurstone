@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <p class="mensaje-final">
+        <p class="mensaje-final" th:if="${resultados != null and #lists.size(resultados) > 1}">
             Según los resultados, tus áreas de mayor interés son
             <strong th:text="${area1}">Área 1</strong> y
             <strong th:text="${area2}">Área 2</strong>.
@@ -51,7 +51,6 @@
 
         <div class="llamada">
             <a class="boton boton--primario" th:href="@{/}">Volver al inicio</a>
-            <a class="boton boton--secundario" th:href="@{/evaluaciones}">Ver historial</a>
         </div>
     </section>
 
