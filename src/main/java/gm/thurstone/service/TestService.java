@@ -1,10 +1,10 @@
-package gm.thurstone.servicio;
+package gm.thurstone.service;
 
-import gm.thurstone.modelo.AreaInteres;
-import gm.thurstone.modelo.Par;
-import gm.thurstone.modelo.ResultadoArea;
-import gm.thurstone.modelo.Respuesta;
-import gm.thurstone.modelo.Tarea;
+import gm.thurstone.model.AreaInteres;
+import gm.thurstone.model.Par;
+import gm.thurstone.model.ResultadoArea;
+import gm.thurstone.model.Respuesta;
+import gm.thurstone.model.Tarea;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class TestService {
     // Matriz completa de la Escala de Thurstone (100 pares) cargada desde un CSV
     // editable: numero;area1;ocupacion1;area2;ocupacion2. El área define el
     // puntaje; la ocupación es solo texto (pendiente de cambiar por tareas).
-    private static final String RUTA_DATOS = "datos/pares.csv";
+    private static final String RUTA_DATOS = "data/pares.csv";
 
     // Puntaje crudo: cada círculo marcado vale 1 punto. "Ambas" marca dos
     // círculos (1 a cada carrera); "ninguna" (X) no suma. Perfil 0-20 por área.

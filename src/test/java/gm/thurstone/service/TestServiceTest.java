@@ -1,7 +1,7 @@
-package gm.thurstone.servicio;
+package gm.thurstone.service;
 
-import gm.thurstone.modelo.Respuesta;
-import gm.thurstone.modelo.ResultadoArea;
+import gm.thurstone.model.Respuesta;
+import gm.thurstone.model.ResultadoArea;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;

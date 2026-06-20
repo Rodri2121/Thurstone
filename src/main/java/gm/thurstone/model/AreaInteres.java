@@ -1,4 +1,4 @@
-package gm.thurstone.modelo;
+package gm.thurstone.model;
 
 /**
  * Las 10 áreas ocupacionales de la Escala de Intereses de Thurstone.

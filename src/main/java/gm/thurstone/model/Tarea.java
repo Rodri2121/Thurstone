@@ -1,4 +1,4 @@
-package gm.thurstone.modelo;
+package gm.thurstone.model;
 
 /**
  * Un ítem que se muestra al evaluado. Por indicación del psicólogo NO se

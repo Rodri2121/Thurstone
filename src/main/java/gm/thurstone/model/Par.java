@@ -1,4 +1,4 @@
-package gm.thurstone.modelo;
+package gm.thurstone.model;
 
 /**
  * Un ítem del test: un par de tareas que el evaluado compara. Se responde con

@@ -595,6 +595,49 @@ body {
     margin-top: 18px;
 }
 
+/* ---------- Historial de evaluaciones ---------- */
+
+.historial {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+}
+
+.historial th,
+.historial td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde-neutro);
+}
+
+.historial thead th {
+    background: var(--azul-fondo-suave);
+    color: var(--azul-oscuro);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.historial tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.historial tbody tr:hover {
+    background: var(--azul-fondo-suave);
+}
+
+.historial-vacio {
+    text-align: center;
+    color: var(--tinta-suave);
+    background: #fff;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 36px;
+}
+
 /* ---------- Responsivo y accesibilidad ---------- */
 
 @media (max-width: 640px) {

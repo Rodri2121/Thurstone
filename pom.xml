@@ -56,12 +56,13 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- Base embebida para la demo (JPA y Session JDBC exigen un datasource).
-             Retirar cuando se configure spring.datasource.* hacia PostgreSQL. -->
+        <!-- H2 solo para tests: la suite corre sobre una base en memoria y no
+             requiere PostgreSQL. En producción se usa PostgreSQL
+             (ver application.properties). -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

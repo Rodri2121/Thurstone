@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de evaluaciones | Test de Thurstone</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="pagina pagina--historial">
+<main class="contenedor">
+
+    <header class="encabezado-resultados">
+        <h1>Historial de evaluaciones</h1>
+        <p class="dato-tiempo"
+           th:text="${#lists.size(evaluaciones)} + ' evaluaciones guardadas'">0 evaluaciones guardadas</p>
+    </header>
+
+    <p class="historial-vacio" th:if="${#lists.isEmpty(evaluaciones)}">
+        Aún no hay evaluaciones registradas.
+    </p>
+
+    <table class="historial" th:unless="${#lists.isEmpty(evaluaciones)}">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Duración</th>
+            <th>Área primaria</th>
+            <th>Área secundaria</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="e : ${evaluaciones}">
+            <td th:text="${e.id}">1</td>
+            <td th:text="${#temporals.format(e.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+            <td th:text="${e.duracionSegundos != null ? e.duracionSegundos + ' s' : '—'}">—</td>
+            <td th:text="${e.areaPrimaria}">Área primaria</td>
+            <td th:text="${e.areaSecundaria}">Área secundaria</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="llamada">
+        <a class="boton boton--secundario" th:href="@{/}">Volver al inicio</a>
+    </div>
+
+</main>
+</body>
+</html>

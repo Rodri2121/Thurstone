@@ -1,4 +1,4 @@
-package gm.thurstone.modelo;
+package gm.thurstone.model;
 
 /**
  * Las cuatro respuestas posibles ante un par, tal como en la prueba en papel:

@@ -1,8 +1,9 @@
-package gm.thurstone.controlador;
+package gm.thurstone.controller;
 
-import gm.thurstone.modelo.ResultadoArea;
-import gm.thurstone.modelo.Respuesta;
-import gm.thurstone.servicio.TestService;
+import gm.thurstone.model.ResultadoArea;
+import gm.thurstone.model.Respuesta;
+import gm.thurstone.service.EvaluacionService;
+import gm.thurstone.service.TestService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,14 +25,22 @@ public class EvaluacionController {
     private static final int PARES_POR_PAGINA = 10;
 
     private final TestService testService;
+    private final EvaluacionService evaluacionService;
 
-    public EvaluacionController(TestService testService) {
+    public EvaluacionController(TestService testService, EvaluacionService evaluacionService) {
         this.testService = testService;
+        this.evaluacionService = evaluacionService;
     }
 
     @GetMapping("/")
     public String inicio() {
         return "index";
+    }
+
+    @GetMapping("/evaluaciones")
+    public String historial(Model model) {
+        model.addAttribute("evaluaciones", evaluacionService.listarTodas());
+        return "evaluaciones";
     }
 
     @GetMapping("/evaluacion")
@@ -67,6 +76,10 @@ public class EvaluacionController {
         }
 
         List<ResultadoArea> resultados = testService.calcularResultados(respuestas);
+
+        // Persistir la evaluación válida en PostgreSQL.
+        evaluacionService.registrar(resultados, duracion);
+
         model.addAttribute("resultados", resultados);
         model.addAttribute("area1", resultados.get(0).area());
         model.addAttribute("area2", resultados.get(1).area());

@@ -2,7 +2,7 @@
 # Formato: numero;area1;tarea1;area2;tarea2
 # Las TAREAS/acciones son un BORRADOR para revisión del psicólogo (sustituyen
 # los nombres de ocupaciones). Las ocupaciones originales están en
-# referencia/pares-ocupaciones.csv (mismo "numero" por fila para comparar).
+# reference/pares-ocupaciones.csv (mismo "numero" por fila para comparar).
 # El área determina el puntaje y NO se muestra; las áreas son idénticas a la
 # versión de ocupaciones, así que cambiar el texto NO afecta el cálculo.
 1;CF;Investigar las leyes de la materia y la energía;CF;Calcular la estructura de un puente
