@@ -1,5 +1,6 @@
 package gm.thurstone.service;
 
+import gm.thurstone.dto.EvaluacionDTO;
 import gm.thurstone.model.Evaluacion;
 import gm.thurstone.model.Evaluado;
 import gm.thurstone.model.EstadoEvaluacion;
@@ -107,6 +108,41 @@ class EvaluacionLifecycleTest {
         Evaluacion a = evaluacionService.asignar(psicologo, evaluado);
         Evaluacion b = evaluacionService.asignar(psicologo, evaluado);
         assertNotEquals(a.getClaveAcceso(), b.getClaveAcceso());
+    }
+
+    @Test
+    void listarPorPsicologoDevuelveResumenComoDto() {
+        Usuario psicologo = usuarioService.registrar("Lia", "Vega", "lia.dto@thurstone.test", "secreta123");
+        Evaluado evaluado = evaluadoService.registrar(psicologo, "Tomás Roca", null, 20, "Masculino");
+        evaluacionService.asignar(psicologo, evaluado);
+
+        List<EvaluacionDTO> dtos = evaluacionService.listarPorPsicologo(psicologo);
+
+        assertEquals(1, dtos.size());
+        EvaluacionDTO dto = dtos.get(0);
+        assertEquals("Tomás Roca", dto.evaluadoNombre());
+        assertEquals(psicologo.getId(), dto.psicologoId());
+        assertEquals(EstadoEvaluacion.PENDIENTE, dto.estado());
+        assertNotNull(dto.claveAcceso());
+        assertTrue(dto.resultados().isEmpty(), "el resumen del historial no incluye el perfil");
+    }
+
+    @Test
+    void buscarDtoPorIdDeUnTestCompletadoTraeElPerfil() {
+        Usuario psicologo = usuarioService.registrar("Ivo", "Paz", "ivo.dto@thurstone.test", "secreta123");
+        Evaluado evaluado = evaluadoService.registrar(psicologo, "Sara Lima", null, null, null);
+        Evaluacion asignada = evaluacionService.asignar(psicologo, evaluado);
+        evaluacionService.completar(asignada.getId(),
+                testService.calcularResultados(respuestasValidas()), Duration.ofMinutes(10));
+
+        EvaluacionDTO dto = evaluacionService.buscarDtoPorId(asignada.getId());
+
+        assertEquals(EstadoEvaluacion.COMPLETADO, dto.estado());
+        assertEquals("Sara Lima", dto.evaluadoNombre());
+        assertEquals(psicologo.getId(), dto.psicologoId());
+        assertEquals(10, dto.resultados().size(), "el detalle reconstruye las 10 áreas");
+        assertEquals("nivel-1", dto.resultados().get(0).claseCss());
+        assertEquals(600L, dto.duracionSegundos());
     }
 
     // Respuestas completas y con variación (no son sabotaje): perfil con 10 áreas.

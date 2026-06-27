@@ -13,24 +13,32 @@
         <h1>Registro de psicólogo</h1>
     </header>
 
-    <p class="alerta" th:if="${error}" th:text="${error}">Error</p>
+    <form class="formulario" method="post" th:action="@{/registro}" th:object="${registroDTO}">
 
-    <form class="formulario" method="post" th:action="@{/registro}">
+        <!-- Errores globales: reglas de negocio del servicio (p. ej. correo ya registrado). -->
+        <p class="alerta" th:if="${#fields.hasGlobalErrors()}"
+           th:each="err : ${#fields.globalErrors()}" th:text="${err}">Error</p>
+
         <div class="campo">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" th:value="${nombre}" required autofocus>
+            <input type="text" id="nombre" th:field="*{nombre}" required autofocus>
+            <p class="campo__error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Error</p>
         </div>
         <div class="campo">
             <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido" th:value="${apellido}">
+            <input type="text" id="apellido" th:field="*{apellido}">
+            <p class="campo__error" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">Error</p>
         </div>
         <div class="campo">
             <label for="correo">Correo</label>
-            <input type="email" id="correo" name="correo" th:value="${correo}" required>
+            <input type="email" id="correo" th:field="*{correo}" required>
+            <p class="campo__error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">Error</p>
         </div>
         <div class="campo">
             <label for="contrasena">Contraseña</label>
+            <!-- Sin th:field para no reflejar la contraseña en el HTML al re-renderizar. -->
             <input type="password" id="contrasena" name="contrasena" required minlength="6">
+            <p class="campo__error" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}">Error</p>
         </div>
         <button class="boton boton--primario" type="submit">Crear cuenta</button>
     </form>

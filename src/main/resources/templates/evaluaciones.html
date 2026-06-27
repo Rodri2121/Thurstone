@@ -42,7 +42,7 @@
         <tbody>
         <tr th:each="e : ${evaluaciones}">
             <td th:text="${e.id}">1</td>
-            <td th:text="${e.evaluado.nombreCompleto}">Evaluado</td>
+            <td th:text="${e.evaluadoNombre}">Evaluado</td>
             <td>
                 <span class="estado"
                       th:classappend="'estado--' + ${#strings.toLowerCase(e.estado)}"

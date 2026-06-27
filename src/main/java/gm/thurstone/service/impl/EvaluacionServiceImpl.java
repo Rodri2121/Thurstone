@@ -1,5 +1,6 @@
 package gm.thurstone.service.impl;
 
+import gm.thurstone.dto.EvaluacionDTO;
 import gm.thurstone.model.Evaluacion;
 import gm.thurstone.model.Evaluado;
 import gm.thurstone.model.EstadoEvaluacion;
@@ -10,12 +11,14 @@ import gm.thurstone.repository.EvaluacionRepository;
 import gm.thurstone.service.AccesoInvalidoException;
 import gm.thurstone.service.ClaveAccesoGenerator;
 import gm.thurstone.service.EvaluacionService;
+import gm.thurstone.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -104,8 +107,15 @@ public class EvaluacionServiceImpl implements EvaluacionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Evaluacion> listarPorPsicologo(Usuario psicologo) {
-        return evaluacionRepository.findByPsicologoOrderByFechaAsignacionDesc(psicologo);
+    public List<EvaluacionDTO> listarPorPsicologo(Usuario psicologo) {
+        return evaluacionRepository.findByPsicologoOrderByFechaAsignacionDesc(psicologo)
+                .stream().map(EvaluacionServiceImpl::aResumen).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EvaluacionDTO buscarDtoPorId(Long id) {
+        return aDetalle(buscarPorId(id));
     }
 
     @Override
@@ -123,5 +133,39 @@ public class EvaluacionServiceImpl implements EvaluacionService {
             clave = claveAccesoGenerator.generar();
         } while (evaluacionRepository.existsByClaveAcceso(clave));
         return clave;
+    }
+
+    // Resumen para el historial: no incluye el detalle del perfil por área.
+    private static EvaluacionDTO aResumen(Evaluacion e) {
+        return aDTO(e, List.of());
+    }
+
+    // Detalle: reconstruye el perfil por área (con su clase de color por ranking)
+    // desde las filas persistidas. El acceso a la colección perezosa ocurre dentro
+    // de la transacción del servicio, no en la vista.
+    private static EvaluacionDTO aDetalle(Evaluacion e) {
+        List<ResultadoArea> perfil = new ArrayList<>();
+        List<ResultadoEvaluacion> filas = e.getResultados();
+        for (int i = 0; i < filas.size(); i++) {
+            ResultadoEvaluacion fila = filas.get(i);
+            perfil.add(new ResultadoArea(fila.getArea(), fila.getPuntaje(),
+                    fila.getPorcentaje(), TestService.claseCssPorRanking(i), fila.getCarreras()));
+        }
+        return aDTO(e, perfil);
+    }
+
+    private static EvaluacionDTO aDTO(Evaluacion e, List<ResultadoArea> resultados) {
+        return new EvaluacionDTO(
+                e.getId(),
+                e.getPsicologo().getId(),
+                e.getEvaluado().getNombreCompleto(),
+                e.getEstado(),
+                e.getClaveAcceso(),
+                e.getFechaAsignacion(),
+                e.getFecha(),
+                e.getDuracionSegundos(),
+                e.getAreaPrimaria(),
+                e.getAreaSecundaria(),
+                resultados);
     }
 }

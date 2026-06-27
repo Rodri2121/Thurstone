@@ -26,7 +26,7 @@ public class TestService {
 
     // Matriz completa de la Escala de Thurstone (100 pares) cargada desde un CSV
     // editable: numero;area1;ocupacion1;area2;ocupacion2. El área define el
-    // puntaje; la ocupación es solo texto (pendiente de cambiar por tareas).
+    // puntaje; la ocupación es solo texto.
     private static final String RUTA_DATOS = "data/pares.csv";
 
     // Puntaje crudo: cada círculo marcado vale 1 punto. "Ambas" marca dos
@@ -76,7 +76,7 @@ public class TestService {
 
     /**
      * Regla anti-sabotaje validada en servidor (el JS del cliente es evitable).
-     * Conductas erráticas que anulan la prueba (según el psicólogo): marcar todo
+     * Conductas erráticas que anulan la prueba: marcar todo
      * con "X" (todo NINGUNA), todos los círculos (todo AMBAS) o dejar todo en
      * blanco (incompleto). Se generaliza a: prueba incompleta o todas las
      * respuestas idénticas (no discrimina entre carreras).

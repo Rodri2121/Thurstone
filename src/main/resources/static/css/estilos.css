@@ -712,6 +712,13 @@ body {
     border-color: var(--azul-claro);
 }
 
+/* Mensaje de validacion por campo (Bean Validation -> th:errors). */
+.campo__error {
+    color: var(--rojo-tinta);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
 .formulario .boton {
     justify-self: start;
 }

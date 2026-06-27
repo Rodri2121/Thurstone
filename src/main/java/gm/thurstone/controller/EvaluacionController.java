@@ -1,8 +1,8 @@
 package gm.thurstone.controller;
 
+import gm.thurstone.dto.EvaluacionDTO;
 import gm.thurstone.model.Evaluacion;
 import gm.thurstone.model.ResultadoArea;
-import gm.thurstone.model.ResultadoEvaluacion;
 import gm.thurstone.model.Respuesta;
 import gm.thurstone.security.UsuarioDetails;
 import gm.thurstone.service.AccesoInvalidoException;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class EvaluacionController {
     // Id de la evaluación cuya clave validó el evaluado en esta sesión.
     private static final String ATRIBUTO_EVALUACION = "evaluacionId";
 
-    // Cuántos pares se muestran por página del wizard (100 pares / 10 = 10 páginas).
+    // Cuántos pares se muestran por página del wizard.
     private static final int PARES_POR_PAGINA = 10;
 
     private final TestService testService;
@@ -141,28 +140,15 @@ public class EvaluacionController {
     @GetMapping("/evaluaciones/{id}")
     public String detalle(@AuthenticationPrincipal UsuarioDetails principal,
                           @PathVariable Long id, Model model) {
-        Evaluacion evaluacion = evaluacionService.buscarPorId(id);
-        if (!evaluacion.getPsicologo().getId().equals(principal.getUsuario().getId())) {
+        EvaluacionDTO evaluacion = evaluacionService.buscarDtoPorId(id);
+        if (!evaluacion.psicologoId().equals(principal.getUsuario().getId())) {
             throw new AccessDeniedException("La evaluación no pertenece al psicólogo.");
         }
         model.addAttribute("evaluacion", evaluacion);
-        model.addAttribute("resultados", aResultadoArea(evaluacion));
-        model.addAttribute("duracion", evaluacion.getDuracionSegundos() == null ? null
-                : formatear(Duration.ofSeconds(evaluacion.getDuracionSegundos())));
+        model.addAttribute("resultados", evaluacion.resultados());
+        model.addAttribute("duracion", evaluacion.duracionSegundos() == null ? null
+                : formatear(Duration.ofSeconds(evaluacion.duracionSegundos())));
         return "detalle";
-    }
-
-    // Reconstruye los ResultadoArea (con su clase de color por ranking) desde las
-    // filas persistidas, para reusar el mismo gráfico de la pantalla de resultados.
-    private List<ResultadoArea> aResultadoArea(Evaluacion evaluacion) {
-        List<ResultadoArea> lista = new ArrayList<>();
-        List<ResultadoEvaluacion> filas = evaluacion.getResultados();
-        for (int i = 0; i < filas.size(); i++) {
-            ResultadoEvaluacion fila = filas.get(i);
-            lista.add(new ResultadoArea(fila.getArea(), fila.getPuntaje(),
-                    fila.getPorcentaje(), TestService.claseCssPorRanking(i), fila.getCarreras()));
-        }
-        return lista;
     }
 
     private Duration calcularDuracion(HttpSession session, String inicioCliente) {

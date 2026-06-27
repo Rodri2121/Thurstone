@@ -11,7 +11,7 @@
 
     <header class="encabezado-resultados">
         <h1>Resultado de
-            <span th:text="${evaluacion.evaluado.nombreCompleto}">Evaluado</span></h1>
+            <span th:text="${evaluacion.evaluadoNombre}">Evaluado</span></h1>
         <p class="dato-tiempo" th:if="${duracion != null}">
             Tiempo total: <strong th:text="${duracion}">12 min 30 s</strong>
         </p>

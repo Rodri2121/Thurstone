@@ -3,11 +3,8 @@ package gm.thurstone.model;
 /**
  * Las 10 áreas ocupacionales de la Escala de Intereses de Thurstone.
  * El código (CF, CB, …) es el de la prueba en papel; {@code nombre} y
- * {@code carreras} son de uso exclusivo del servidor y nunca se envían a la
+ * {@code carreras} son de uso exclusivo del servidor y no se envían a la
  * vista de evaluación, para no revelar a qué área pertenece cada ocupación.
- *
- * NOTA: el mapeo área→carreras es una propuesta inicial y debe validarse con
- * el psicólogo responsable antes de usarse en producción.
  */
 public enum AreaInteres {
     CF("Ciencias Físicas", "Ingeniería, Física, Arquitectura"),

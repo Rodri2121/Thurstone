@@ -1,5 +1,6 @@
 package gm.thurstone.service;
 
+import gm.thurstone.dto.EvaluacionDTO;
 import gm.thurstone.model.Evaluacion;
 import gm.thurstone.model.Evaluado;
 import gm.thurstone.model.ResultadoArea;
@@ -35,7 +36,12 @@ public interface EvaluacionService {
      */
     Evaluacion invalidar(Long evaluacionId);
 
-    List<Evaluacion> listarPorPsicologo(Usuario psicologo);
+    /** Resumen de las evaluaciones del psicólogo para el historial (sin perfil). */
+    List<EvaluacionDTO> listarPorPsicologo(Usuario psicologo);
 
+    /** Detalle de una evaluación para la vista, con el perfil por área. */
+    EvaluacionDTO buscarDtoPorId(Long id);
+
+    /** Entidad para uso interno del servicio; no se expone a las vistas. */
     Evaluacion buscarPorId(Long id);
 }

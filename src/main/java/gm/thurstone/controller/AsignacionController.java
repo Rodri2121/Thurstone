@@ -1,5 +1,6 @@
 package gm.thurstone.controller;
 
+import gm.thurstone.dto.EvaluacionDTO;
 import gm.thurstone.model.Evaluacion;
 import gm.thurstone.model.Evaluado;
 import gm.thurstone.model.Usuario;
@@ -48,8 +49,8 @@ public class AsignacionController {
     @GetMapping("/{id}")
     public String detalle(@AuthenticationPrincipal UsuarioDetails principal,
                           @PathVariable Long id, Model model) {
-        Evaluacion evaluacion = evaluacionService.buscarPorId(id);
-        if (!evaluacion.getPsicologo().getId().equals(principal.getUsuario().getId())) {
+        EvaluacionDTO evaluacion = evaluacionService.buscarDtoPorId(id);
+        if (!evaluacion.psicologoId().equals(principal.getUsuario().getId())) {
             throw new AccessDeniedException("La evaluación no pertenece al psicólogo.");
         }
         model.addAttribute("evaluacion", evaluacion);

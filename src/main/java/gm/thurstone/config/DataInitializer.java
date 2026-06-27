@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Crea un psicólogo de demostración la primera vez que arranca la app (cuando no
- * hay ningún usuario), para poder iniciar sesión sin pasos manuales. En
- * producción debe registrarse un usuario real; esta semilla se puede desactivar
- * con {@code thurstone.seed-demo-user=false}.
+ * hay ningún usuario), para poder iniciar sesión sin pasos manuales. La semilla
+ * se desactiva con {@code thurstone.seed-demo-user=false}.
  */
 @Component
 @ConditionalOnProperty(prefix = "thurstone", name = "seed-demo-user", matchIfMissing = true)
